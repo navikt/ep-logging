@@ -1,2 +1,5 @@
 # eessi-pensjon-logging
-Felles logg library for EESSI pensjon applikasjoner
+
+## Releasing
+
+This library is released using the `net.researchgate/gradle-release`-plugin.
