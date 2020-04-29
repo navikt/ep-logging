@@ -40,14 +40,9 @@ val junitVersion by extra("5.6.2")
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.4.2")
-    implementation("org.springframework:spring-web:$springVersion")
-    implementation("org.springframework:spring-context:$springVersion")
-    implementation("javax.servlet:javax.servlet-api:4.0.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     testImplementation("org.springframework:spring-test:$springVersion")
-    testImplementation("io.mockk:mockk:1.10.0")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
     implementation("no.nav.security:oidc-spring-support:0.2.18")
 
