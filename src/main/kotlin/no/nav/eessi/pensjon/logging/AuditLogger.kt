@@ -21,6 +21,10 @@ class AuditLogger(private val oidcRequestContextHolder: OIDCRequestContextHolder
         logger.info("brukerident: ${getSubjectfromToken()} tjenesten: $tjenesteFunctionName aktoerId: $aktoerId")
     }
 
+    fun log(tjenesteFunctionName: String, aktoerId: String,  requestContext: String) {
+        logger.info("brukerident: ${getSubjectfromToken()} tjenesten: $tjenesteFunctionName aktoerId: $aktoerId $requestContext")
+    }
+
     fun logBorger(tjenesteFunctionName: String, borgerfnr: String) {
         logger.info("brukerident: ${getSubjectfromToken()} tjenesten: $tjenesteFunctionName fnr: $borgerfnr")
     }
