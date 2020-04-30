@@ -26,6 +26,6 @@ jobs:
         ref: "release-${{ env.VERSION }}"
 
     - name: publish package
-      run: ./gradlew publish
+      run: ./gradlew publish --info
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
