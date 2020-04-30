@@ -29,6 +29,10 @@ class AuditLogger(private val oidcRequestContextHolder: OIDCRequestContextHolder
         logger.info("brukerident: ${getSubjectfromToken()} tjenesten: $tjenesteFunctionName fnr: $borgerfnr feilmelding: $errorMelding")
     }
 
+    fun logBuc(tjenesteFunctionName: String, euxData: String) {
+        logger.info("brukerident: ${getSubjectfromToken()} tjenesten: $tjenesteFunctionName $euxData")
+    }
+
     private fun getSubjectfromToken() : String {
         return try {
             val context = oidcRequestContextHolder.oidcValidationContext
