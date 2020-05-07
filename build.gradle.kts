@@ -11,8 +11,8 @@ plugins {
     id("com.adarshr.test-logger") version "2.0.0"
     id("org.jetbrains.kotlin.plugin.spring") version "1.3.72"
     id("com.github.ben-manes.versions") version "0.28.0"
-    id("org.owasp.dependencycheck") version "5.2.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.13"
+    id("org.owasp.dependencycheck") version "5.3.2.1"
 }
 
 group = "no.nav.eessi.pensjon"
@@ -42,12 +42,11 @@ val junitVersion by extra("5.6.2")
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("no.nav.security:oidc-spring-support:0.2.18")
 
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     testImplementation("org.springframework:spring-test:$springVersion")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
-    implementation("no.nav.security:oidc-spring-support:0.2.18")
-
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
 }
 
 // https://github.com/researchgate/gradle-release
