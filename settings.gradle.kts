@@ -1,1 +1,1 @@
-rootProject.name = "eessi-pensjon-logging"
+rootProject.name = "ep-logging"
