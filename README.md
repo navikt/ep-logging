@@ -1,4 +1,4 @@
-# eessi-pensjon-logging
+# ep-logging
 
 ## Releasing
 
