@@ -35,17 +35,14 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-val springVersion by extra("5.2.5.RELEASE")
-val junitVersion by extra("5.6.2")
-
-
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("no.nav.security:oidc-spring-support:0.2.18")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.3.+")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
-    testImplementation("org.springframework:spring-test:$springVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.+")
+    testImplementation("org.springframework:spring-test:5.+")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
 }
 
