@@ -39,7 +39,7 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("no.nav.security:oidc-spring-support:0.2.18")
-    implementation("org.springframework.boot:spring-boot-starter-web:2.3.+")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.2.6.RELEASE")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.+")
     testImplementation("org.springframework:spring-test:5.+")
