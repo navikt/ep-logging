@@ -44,6 +44,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:2.2.6.RELEASE")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.+")
+    testImplementation("org.mockito:mockito-junit-jupiter:3.2.4")
     testImplementation("org.springframework:spring-test:5.+")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
 }
