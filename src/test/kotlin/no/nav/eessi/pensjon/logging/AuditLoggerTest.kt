@@ -3,6 +3,7 @@ package no.nav.eessi.pensjon.logging
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.Appender
+import com.nhaarman.mockitokotlin2.atLeastOnce
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
@@ -46,14 +47,47 @@ class AuditLoggerTest {
 
     @Test
     fun testOne() {
-        auditLogger.cefLog(mapOf(AuditLogger.AuditKey.TJENESTEN to "12312", AuditLogger.AuditKey.AKTOER to "31242"))
+        auditLogger.cefLog(mapOf(AuditLogger.AuditKey.BRUKERIDENT to "Z990652", AuditLogger.AuditKey.TJENESTEN to "addInstitutionAndDocument", AuditLogger.AuditKey.BORGERFNR to "15268923561", AuditLogger.AuditKey.AKTOER to "31242"))
 
-        verify(mockedAppender).doAppend(argumentCaptor.capture());
+        verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture());
         val logEvent = argumentCaptor.getValue();
 
-        Assertions.assertTrue(logEvent.getMessage().contains("CEF:0|EESSI-PENSJON|AUDIT|1.0|||INFO|"))
-        Assertions.assertTrue(logEvent.getMessage().contains("brukerident= tjenesten=12312 borgerfnr= aktoer=31242 error= euxdata= requestcontext="))
+        Assertions.assertTrue(logEvent.getMessage().contains("CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO"))
+        Assertions.assertTrue(logEvent.getMessage().contains("suid=Z990652 duid=15268923561 aktoer=31242 flexString1=addInstitutionAndDocument flexString1Label=tjenesten flexString2= flexString2Label=error flexString3= flexString3Label=euxData"))
 
     }
 
+    @Test
+    fun testLogBucDeprecated() {
+        auditLogger.logBuc("OpprettBuc", "123456")
+
+        verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture())
+        val logEvent = argumentCaptor.getValue()
+
+        println(logEvent.message)
+
+        Assertions.assertTrue(logEvent.getMessage().contains("CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO"))
+        Assertions.assertTrue(logEvent.getMessage().contains("suid=n/a duid= aktoer= flexString1=OpprettBuc flexString1Label=tjenesten flexString2= flexString2Label=error flexString3=123456 flexString3Label=euxData"))
+
+    }
+
+
+//    CEF:0|EESSI-PENSJON|AUDIT|1.0|||INFO|brukerident=n/a tjenesten=addInstutionAndDocument borgerfnr= aktoer=0105094340092 error= euxdata= requestcontext=sakId: EESSI-PEN-123 vedtakId: 1234567 buc: P_BUC_06 sed: P6000 euxCaseId: 1234567890
+
+    @Test
+    fun `Test logging av requestcontext`() {
+        auditLogger.log("OpprettBuc", "123456", "sakId: EESSI-PEN-123 vedtakId: 1234567 buc: P_BUC_06 sed: P6000 euxCaseId: 1234567890")
+
+        verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture())
+        val logEvent = argumentCaptor.getValue()
+
+        Assertions.assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO"))
+        Assertions.assertTrue(logEvent.message.contains("suid=n/a duid= aktoer=123456 flexString1=OpprettBuc flexString1Label=tjenesten flexString2= flexString2Label=error flexString3= flexString3Label="))
+
+        Assertions.assertTrue(logEvent.message.contains("deviceCustomString1=EESSI-PEN-123 deviceCustomString1Label=sakId deviceCustomString2=1234567 deviceCustomString2Label=vedtakId deviceCustomString3=P_BUC_06 deviceCustomString3Label=buc deviceCustomString4=P6000 deviceCustomString4Label=sed deviceCustomString5=1234567890 deviceCustomString5Label=euxCaseId"))
+
+    }
 }
+
+
+
