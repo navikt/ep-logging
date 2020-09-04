@@ -84,7 +84,7 @@ class AuditLoggerTest {
         Assertions.assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO"))
         Assertions.assertTrue(logEvent.message.contains("suid=n/a duid= aktoer=123456 flexString1=OpprettBuc flexString1Label=tjenesten flexString2= flexString2Label=error flexString3= flexString3Label="))
 
-        Assertions.assertTrue(logEvent.message.contains("deviceCustomString1=EESSI-PEN-123 deviceCustomString1Label=sakId deviceCustomString2=1234567 deviceCustomString2Label=vedtakId deviceCustomString3=P_BUC_06 deviceCustomString3Label=buc deviceCustomString4=P6000 deviceCustomString4Label=sed deviceCustomString5=1234567890 deviceCustomString5Label=euxCaseId"))
+        Assertions.assertTrue(logEvent.message.contains("cs5=EESSI-PEN-123 cs5Label=sakId cs6=1234567 cs6Label=vedtakId cs7=P_BUC_06 cs7Label=buc cs8=P6000 cs8Label=sed cs9=1234567890 cs9Label=euxCaseId"))
 
     }
 }

@@ -87,11 +87,12 @@ class AuditLogger(private val tokenValidationContextHolder: TokenValidationConte
     }
 
     private fun cefExtension(values: Map<AuditKey, String>): String {
-        return String.format("suid=%s duid=%s aktoer=%s flexString1=%s flexString1Label=tjenesten flexString2=%s flexString2Label=error flexString3=%s flexString3Label=euxData %s",
-                getBrukerident(values), getBorgerfnr(values), getAktoer(values), getTjenesten(values),
+        return String.format("end=%s suid=%s duid=%s aktoer=%s flexString1=%s flexString1Label=tjenesten flexString2=%s flexString2Label=error flexString3=%s flexString3Label=euxData %s",
+                getTimeStamp(), getBrukerident(values), getBorgerfnr(values), getAktoer(values), getTjenesten(values),
                 getError(values), getEuxdata(values), getDelimitedContext(values))
     }
 
+    private fun getTimeStamp() = System.currentTimeMillis().toString()
     private fun getBrukerident(values: Map<AuditKey, String>) = values.getOrDefault(AuditKey.BRUKERIDENT, "")
     private fun getTjenesten(values: Map<AuditKey, String>) = values.getOrDefault(AuditKey.TJENESTEN, "")
     private fun getBorgerfnr(values: Map<AuditKey, String>) = values.getOrDefault(AuditKey.BORGERFNR, "")
@@ -110,15 +111,18 @@ class AuditLogger(private val tokenValidationContextHolder: TokenValidationConte
 
     }
 
+
+    // cs 1, 2 og 4 kan ikke brukes
+
     private fun contextExtractor(list: List<String>) : String {
         val sb = StringBuffer()
 
         val contextIterator = list.iterator()
-        var index = 1
+        var index = 5
         while (contextIterator.hasNext()) {
             val label = contextIterator.next().replace(":", "")
             val value = contextIterator.next()
-            sb.append(String.format("deviceCustomString$index=%s deviceCustomString${index}Label=%s", value, label))
+            sb.append(String.format("cs$index=%s cs${index}Label=%s", value, label))
             sb.append(" ")
             index++
         }
