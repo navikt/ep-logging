@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.Appender
 import com.nhaarman.mockitokotlin2.atLeastOnce
+import no.nav.eessi.pensjon.logging.cef.CommonEventFormat
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
@@ -34,31 +35,31 @@ class AuditLoggerTest {
 
     @BeforeEach
     fun setup() {
-        auditLogger = AuditLogger(mocktoken)
-        val logger : Logger = getLogger("auditLogger") as Logger
+        auditLogger = AuditLogger(mocktoken, CommonEventFormat())
+        val logger: Logger = getLogger("auditLogger") as Logger
         logger.addAppender(mockedAppender)
     }
 
     @AfterEach
     fun takedown() {
-        val logger : Logger = getLogger("auditLogger") as Logger
+        val logger: Logger = getLogger("auditLogger") as Logger
         logger.detachAppender(mockedAppender)
     }
 
     @Test
-    fun testOne() {
+    fun `tester ut nytt loggformat cef`() {
         auditLogger.cefLog(mapOf(AuditLogger.AuditKey.BRUKERIDENT to "Z990652", AuditLogger.AuditKey.TJENESTEN to "addInstitutionAndDocument", AuditLogger.AuditKey.BORGERFNR to "15268923561", AuditLogger.AuditKey.AKTOER to "31242"))
 
         verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture());
         val logEvent = argumentCaptor.getValue();
 
         Assertions.assertTrue(logEvent.getMessage().contains("CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO"))
-        Assertions.assertTrue(logEvent.getMessage().contains("suid=Z990652 duid=15268923561 aktoer=31242 flexString1=addInstitutionAndDocument flexString1Label=tjenesten flexString2= flexString2Label=error flexString3= flexString3Label=euxData"))
+        Assertions.assertTrue(logEvent.getMessage().contains("suid=Z990652 duid=15268923561 aktoer=31242 cs3=addInstitutionAndDocument cs3Label=tjenesten"))
 
     }
 
     @Test
-    fun testLogBucDeprecated() {
+    fun testLogBuc() {
         auditLogger.logBuc("OpprettBuc", "123456")
 
         verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture())
@@ -67,26 +68,51 @@ class AuditLoggerTest {
         println(logEvent.message)
 
         Assertions.assertTrue(logEvent.getMessage().contains("CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO"))
-        Assertions.assertTrue(logEvent.getMessage().contains("suid=n/a duid= aktoer= flexString1=OpprettBuc flexString1Label=tjenesten flexString2= flexString2Label=error flexString3=123456 flexString3Label=euxData"))
+        Assertions.assertTrue(logEvent.getMessage().contains("suid=n/a cs3=OpprettBuc cs3Label=tjenesten cs5=euxCaseId:123456"))
 
     }
 
-
-//    CEF:0|EESSI-PENSJON|AUDIT|1.0|||INFO|brukerident=n/a tjenesten=addInstutionAndDocument borgerfnr= aktoer=0105094340092 error= euxdata= requestcontext=sakId: EESSI-PEN-123 vedtakId: 1234567 buc: P_BUC_06 sed: P6000 euxCaseId: 1234567890
-
     @Test
-    fun `Test logging av requestcontext`() {
-        auditLogger.log("OpprettBuc", "123456", "sakId: EESSI-PEN-123 vedtakId: 1234567 buc: P_BUC_06 sed: P6000 euxCaseId: 1234567890")
+    fun `Test av logging av PrefillP6000 med context`() {
+        auditLogger.log("confirmDocument", "0105094340092", "sakId: 22874955 vedtakId: 9876543211 buc: P_BUC_02 sed: P6000 euxCaseId: 123123")
 
         verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture())
         val logEvent = argumentCaptor.getValue()
 
         Assertions.assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO"))
-        Assertions.assertTrue(logEvent.message.contains("suid=n/a duid= aktoer=123456 flexString1=OpprettBuc flexString1Label=tjenesten flexString2= flexString2Label=error flexString3= flexString3Label="))
+        Assertions.assertTrue(logEvent.message.contains("suid=n/a aktoer=0105094340092 cs3=confirmDocument cs3Label=tjenesten"))
+        Assertions.assertTrue(logEvent.message.contains("flexString1=22874955 flexString1Label=sakId cs5=vedtakId:9876543211 buc:P_BUC_02 sed:P6000 euxCaseId:123123"))
+    }
 
-        Assertions.assertTrue(logEvent.message.contains("cs5=EESSI-PEN-123 cs5Label=sakId cs6=1234567 cs6Label=vedtakId cs7=P_BUC_06 cs7Label=buc cs8=P6000 cs8Label=sed cs9=1234567890 cs9Label=euxCaseId"))
+
+    @Test
+    fun `Test av logging av PrefillP2000 med context`() {
+        auditLogger.log("confirmDocument", "0105094340092", "sakId: 22874955 vedtakId: 9876543211 buc: P_BUC_02 sed: P6000 euxCaseId: 123456")
+
+        verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture())
+        val logEvent = argumentCaptor.getValue()
+
+        Assertions.assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO"))
+        Assertions.assertTrue(logEvent.message.contains("suid=n/a aktoer=0105094340092 cs3=confirmDocument cs3Label=tjenesten"))
+
+        Assertions.assertTrue(logEvent.message.contains("flexString1=22874955 flexString1Label=sakId cs5=vedtakId:9876543211 buc:P_BUC_02 sed:P6000 euxCaseId:123456"))
 
     }
+
+
+    @Test
+    fun `Test av logging der sed er skrevet ut i loggen`() {
+        auditLogger.log("confirmDocument", "0105094340092", "sed: P6000")
+
+        verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture());
+        val logEvent = argumentCaptor.getValue();
+
+        Assertions.assertTrue(logEvent.message.contains("sed:P6000"))
+        Assertions.assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO|"))
+        Assertions.assertTrue(logEvent.message.contains("suid=n/a aktoer=0105094340092 cs3=confirmDocument cs3Label=tjenesten cs5=sed:P6000"))
+
+    }
+
 }
 
 
