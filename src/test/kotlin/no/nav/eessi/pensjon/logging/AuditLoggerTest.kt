@@ -4,7 +4,6 @@ import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.Appender
 import com.nhaarman.mockitokotlin2.atLeastOnce
-import no.nav.eessi.pensjon.logging.cef.CommonEventFormat
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
@@ -35,7 +34,7 @@ class AuditLoggerTest {
 
     @BeforeEach
     fun setup() {
-        auditLogger = AuditLogger(mocktoken, CommonEventFormat())
+        auditLogger = AuditLogger(mocktoken)
         val logger: Logger = getLogger("auditLogger") as Logger
         logger.addAppender(mockedAppender)
     }
@@ -48,7 +47,7 @@ class AuditLoggerTest {
 
     @Test
     fun `tester ut nytt loggformat cef`() {
-        auditLogger.cefLog(mapOf(AuditLogger.AuditKey.BRUKERIDENT to "Z990652", AuditLogger.AuditKey.TJENESTEN to "addInstitutionAndDocument", AuditLogger.AuditKey.BORGERFNR to "15268923561", AuditLogger.AuditKey.AKTOER to "31242"))
+        auditLogger.cefLog(mapOf(AuditKey.BRUKERIDENT to "Z990652", AuditKey.TJENESTEN to "addInstitutionAndDocument", AuditKey.BORGERFNR to "15268923561", AuditKey.AKTOER to "31242"))
 
         verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture());
         val logEvent = argumentCaptor.getValue();

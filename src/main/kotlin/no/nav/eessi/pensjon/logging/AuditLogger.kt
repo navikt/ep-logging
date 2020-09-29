@@ -1,19 +1,18 @@
 package no.nav.eessi.pensjon.logging
 
-import no.nav.eessi.pensjon.logging.cef.CommonEventFormat
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AuditLogger(private val tokenValidationContextHolder: TokenValidationContextHolder,
-        private val cef: CommonEventFormat) {
+class AuditLogger(private val tokenValidationContextHolder: TokenValidationContextHolder){
 
     private val logger = LoggerFactory.getLogger("auditLogger")
+    private val cef = AuditLoggerCEF()
 
     // Vi trenger denne no arg konstruktøren for å kunne bruke @Spy med mockito
-    constructor() : this(SpringTokenValidationContextHolder(), CommonEventFormat())
+    constructor() : this(SpringTokenValidationContextHolder())
 
     fun log(tjenesteFunctionName: String) {
         cefLog(mapOf(AuditKey.BRUKERIDENT to getSubjectfromToken(), AuditKey.TJENESTEN to tjenesteFunctionName))
@@ -45,14 +44,6 @@ class AuditLogger(private val tokenValidationContextHolder: TokenValidationConte
         }
     }
 
-    enum class AuditKey {
-        BRUKERIDENT,
-        TJENESTEN,
-        BORGERFNR,
-        AKTOER,
-        EUXCASEID,
-        REQUESTCONTEXT
-    }
 
     //CommonEventFormat
     //ny måte å logge på audit /cef format

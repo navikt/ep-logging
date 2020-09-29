@@ -1,12 +1,12 @@
-package no.nav.eessi.pensjon.logging.cef
+package no.nav.eessi.pensjon.logging
 
 import no.nav.eessi.pensjon.logging.AuditLogger
-import org.springframework.stereotype.Component
+import no.nav.eessi.pensjon.logging.AuditKey
 
-@Component
-class CommonEventFormat {
 
-    fun getCefLog(values: Map<AuditLogger.AuditKey, String>) :String {
+class AuditLoggerCEF {
+
+    fun getCefLog(values: Map<AuditKey, String>) :String {
         return cefHeader()+cefExtension(values)
     }
 
@@ -15,17 +15,17 @@ class CommonEventFormat {
         return "CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO|"
     }
 
-    fun cefExtension(values: Map<AuditLogger.AuditKey, String>): String {
+    fun cefExtension(values: Map<AuditKey, String>): String {
         return String.format("end=%s %s%s%scs3=%s cs3Label=tjenesten %s ",
                 getTimeStamp(), getBrukerident(values), getBorgerfnr(values), getAktoer(values), getTjenesten(values),
                 getDelimitedContext(values))
     }
 
     private fun getTimeStamp() = System.currentTimeMillis().toString()
-    private fun getBrukerident(values: Map<AuditLogger.AuditKey, String>) = filterOutUnusedField("suid=", values.getOrDefault(AuditLogger.AuditKey.BRUKERIDENT, "")+ " ")
-    private fun getBorgerfnr(values: Map<AuditLogger.AuditKey, String>) = filterOutUnusedField("duid=", values.getOrDefault(AuditLogger.AuditKey.BORGERFNR, "") + " ")
-    private fun getAktoer(values: Map<AuditLogger.AuditKey, String>) = filterOutUnusedField("aktoer=", values.getOrDefault(AuditLogger.AuditKey.AKTOER,  "") + " ")
-    private fun getTjenesten(values: Map<AuditLogger.AuditKey, String>) = values.getOrDefault(AuditLogger.AuditKey.TJENESTEN, "")
+    private fun getBrukerident(values: Map<AuditKey, String>) = filterOutUnusedField("suid=", values.getOrDefault(AuditKey.BRUKERIDENT, "")+ " ")
+    private fun getBorgerfnr(values: Map<AuditKey, String>) = filterOutUnusedField("duid=", values.getOrDefault(AuditKey.BORGERFNR, "") + " ")
+    private fun getAktoer(values: Map<AuditKey, String>) = filterOutUnusedField("aktoer=", values.getOrDefault(AuditKey.AKTOER,  "") + " ")
+    private fun getTjenesten(values: Map<AuditKey, String>) = values.getOrDefault(AuditKey.TJENESTEN, "")
 
     private fun filterOutUnusedField(field: String, value: String): String {
         return if (value.isBlank()) {
@@ -35,9 +35,9 @@ class CommonEventFormat {
         }
     }
 
-    private fun getDelimitedContext(values: Map<AuditLogger.AuditKey, String>): String {
-        val context = values.getOrDefault(AuditLogger.AuditKey.REQUESTCONTEXT, "")
-        val euxCaseId = values.getOrDefault(AuditLogger.AuditKey.EUXCASEID, "")
+    private fun getDelimitedContext(values: Map<AuditKey, String>): String {
+        val context = values.getOrDefault(AuditKey.REQUESTCONTEXT, "")
+        val euxCaseId = values.getOrDefault(AuditKey.EUXCASEID, "")
 
         if (euxCaseId.isNotBlank() && context.isNullOrEmpty()) {
             return "cs5=euxCaseId:$euxCaseId"
