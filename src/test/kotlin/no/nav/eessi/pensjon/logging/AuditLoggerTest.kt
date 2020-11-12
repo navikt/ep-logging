@@ -52,8 +52,8 @@ class AuditLoggerTest {
         verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture());
         val logEvent = argumentCaptor.getValue();
 
-        Assertions.assertTrue(logEvent.getMessage().contains("CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO"))
-        Assertions.assertTrue(logEvent.getMessage().contains("suid=Z990652 duid=15268923561 aktoer=31242 cs3=addInstitutionAndDocument cs3Label=tjenesten"))
+        Assertions.assertTrue(logEvent.getMessage().contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
+        Assertions.assertTrue(logEvent.getMessage().contains("suid=Z990652 duid=15268923561 cs3=addInstitutionAndDocument cs3Label=tjenesten"))
 
     }
 
@@ -64,9 +64,7 @@ class AuditLoggerTest {
         verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture())
         val logEvent = argumentCaptor.getValue()
 
-        println(logEvent.message)
-
-        Assertions.assertTrue(logEvent.getMessage().contains("CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO"))
+        Assertions.assertTrue(logEvent.getMessage().contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
         Assertions.assertTrue(logEvent.getMessage().contains("suid=n/a cs3=OpprettBuc cs3Label=tjenesten cs5=euxCaseId:123456"))
 
     }
@@ -78,8 +76,8 @@ class AuditLoggerTest {
         verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture())
         val logEvent = argumentCaptor.getValue()
 
-        Assertions.assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO"))
-        Assertions.assertTrue(logEvent.message.contains("suid=n/a aktoer=0105094340092 cs3=confirmDocument cs3Label=tjenesten"))
+        Assertions.assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
+        Assertions.assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=confirmDocument cs3Label=tjenesten"))
         Assertions.assertTrue(logEvent.message.contains("flexString1=22874955 flexString1Label=sakId cs5=vedtakId:9876543211 buc:P_BUC_02 sed:P6000 euxCaseId:123123"))
     }
 
@@ -91,8 +89,8 @@ class AuditLoggerTest {
         verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture())
         val logEvent = argumentCaptor.getValue()
 
-        Assertions.assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO"))
-        Assertions.assertTrue(logEvent.message.contains("suid=n/a aktoer=0105094340092 cs3=confirmDocument cs3Label=tjenesten"))
+        Assertions.assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
+        Assertions.assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=confirmDocument cs3Label=tjenesten"))
 
         Assertions.assertTrue(logEvent.message.contains("flexString1=22874955 flexString1Label=sakId cs5=vedtakId:9876543211 buc:P_BUC_02 sed:P6000 euxCaseId:123456"))
 
@@ -107,8 +105,8 @@ class AuditLoggerTest {
         val logEvent = argumentCaptor.getValue();
 
         Assertions.assertTrue(logEvent.message.contains("sed:P6000"))
-        Assertions.assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO|"))
-        Assertions.assertTrue(logEvent.message.contains("suid=n/a aktoer=0105094340092 cs3=confirmDocument cs3Label=tjenesten cs5=sed:P6000"))
+        Assertions.assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO|"))
+        Assertions.assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=confirmDocument cs3Label=tjenesten cs5=sed:P6000"))
 
     }
 

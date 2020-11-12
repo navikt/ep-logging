@@ -12,19 +12,31 @@ class AuditLoggerCEF {
 
     // CEF:Version|Device Vendor|Device Product|Device Version|Device Event Class ID|Name|Severity|[Extension]
     fun cefHeader(): String {
-        return "CEF:0|EESSI|EESSI-PENSJON|Audit:accessed|AuditLog|INFO|"
+        return "CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO|"
     }
 
     fun cefExtension(values: Map<AuditKey, String>): String {
-        return String.format("end=%s %s%s%scs3=%s cs3Label=tjenesten %s ",
-                getTimeStamp(), getBrukerident(values), getBorgerfnr(values), getAktoer(values), getTjenesten(values),
+        return String.format("end=%s %s%scs3=%s cs3Label=tjenesten %s ",
+                getTimeStamp(), getBrukerident(values), getBorgerEllerAktoer(values), getTjenesten(values),
                 getDelimitedContext(values))
+    }
+
+    private fun getBorgerEllerAktoer(values: Map<AuditKey, String>) : String {
+        val borger = getBorgerfnr(values)
+        val aktoer = getAktoer(values)
+
+        if (borger.isNotBlank()) {
+            return "duid=$borger"
+        } else if (aktoer.isNotBlank()) {
+            return "duid=$aktoer"
+        }
+        return ""
     }
 
     private fun getTimeStamp() = System.currentTimeMillis().toString()
     private fun getBrukerident(values: Map<AuditKey, String>) = filterOutUnusedField("suid=", values.getOrDefault(AuditKey.BRUKERIDENT, "")+ " ")
-    private fun getBorgerfnr(values: Map<AuditKey, String>) = filterOutUnusedField("duid=", values.getOrDefault(AuditKey.BORGERFNR, "") + " ")
-    private fun getAktoer(values: Map<AuditKey, String>) = filterOutUnusedField("aktoer=", values.getOrDefault(AuditKey.AKTOER,  "") + " ")
+    private fun getBorgerfnr(values: Map<AuditKey, String>) = filterOutUnusedField("", values.getOrDefault(AuditKey.BORGERFNR, "") + " ")
+    private fun getAktoer(values: Map<AuditKey, String>) = filterOutUnusedField("", values.getOrDefault(AuditKey.AKTOER,  "") + " ")
     private fun getTjenesten(values: Map<AuditKey, String>) = values.getOrDefault(AuditKey.TJENESTEN, "")
 
     private fun filterOutUnusedField(field: String, value: String): String {
