@@ -1,9 +1,5 @@
 package no.nav.eessi.pensjon.logging
 
-import no.nav.eessi.pensjon.logging.AuditLogger
-import no.nav.eessi.pensjon.logging.AuditKey
-
-
 class AuditLoggerCEF {
 
     fun getCefLog(values: Map<AuditKey, String>) :String {
@@ -17,46 +13,27 @@ class AuditLoggerCEF {
 
     fun cefExtension(values: Map<AuditKey, String>): String {
         return String.format("end=%s %s%scs3=%s cs3Label=tjenesten %s ",
-                getTimeStamp(), getBrukerident(values), getBorgerEllerAktoer(values), getTjenesten(values),
+                getTimeStamp(), getBrukerident(values), getAktoer(values), getTjenesten(values),
                 getDelimitedContext(values))
-    }
-
-    private fun getBorgerEllerAktoer(values: Map<AuditKey, String>) : String {
-        val borger = getBorgerfnr(values)
-        val aktoer = getAktoer(values)
-
-        if (borger.isNotBlank()) {
-            return "duid=$borger"
-        } else if (aktoer.isNotBlank()) {
-            return "duid=$aktoer"
-        }
-        return ""
     }
 
     private fun getTimeStamp() = System.currentTimeMillis().toString()
     private fun getBrukerident(values: Map<AuditKey, String>) = filterOutUnusedField("suid=", values.getOrDefault(AuditKey.BRUKERIDENT, "")+ " ")
-    private fun getBorgerfnr(values: Map<AuditKey, String>) = filterOutUnusedField("", values.getOrDefault(AuditKey.BORGERFNR, "") + " ")
-    private fun getAktoer(values: Map<AuditKey, String>) = filterOutUnusedField("", values.getOrDefault(AuditKey.AKTOER,  "") + " ")
+    private fun getAktoer(values: Map<AuditKey, String>) = filterOutUnusedField("duid=", values.getOrDefault(AuditKey.AKTOER,  "") + " ")
     private fun getTjenesten(values: Map<AuditKey, String>) = values.getOrDefault(AuditKey.TJENESTEN, "")
 
-    private fun filterOutUnusedField(field: String, value: String): String {
-        return if (value.isBlank()) {
-            ""
-        } else {
-            field+value
-        }
-    }
+    private fun filterOutUnusedField(field: String, value: String) = if(value.isBlank()) "" else field+value
 
     private fun getDelimitedContext(values: Map<AuditKey, String>): String {
         val context = values.getOrDefault(AuditKey.REQUESTCONTEXT, "")
         val euxCaseId = values.getOrDefault(AuditKey.EUXCASEID, "")
 
-        if (euxCaseId.isNotBlank() && context.isNullOrEmpty()) {
+        if (euxCaseId.isNotBlank() && context.isEmpty()) {
             return "cs5=euxCaseId:$euxCaseId"
         }
-        if (context.isNullOrEmpty()) return ""
-        val data = context.split(" ")
-        val map = contextExtractor(data)
+        if (context.isEmpty()) return ""
+        val datatmp = context.replace(": ", ":")
+        val map = contextExtractor(datatmp.split(" "))
 
         return getDelimitedContextText(map)
 
@@ -64,11 +41,12 @@ class AuditLoggerCEF {
 
     private fun contextExtractor(list: List<String>): Map<String, String> {
         val map = mutableMapOf<String, String>()
-        val contextIterator = list.iterator()
-        while (contextIterator.hasNext()) {
-            val label = contextIterator.next().replace(":", "")
-            val value = contextIterator.next()
-            map.put(label, value)
+        for (str in list) {
+            val keyval = str.split(":")
+            val label = keyval[0]
+            val value = keyval[1]
+            if (value.isNotEmpty())
+                map[label] = value
         }
         return map
     }
