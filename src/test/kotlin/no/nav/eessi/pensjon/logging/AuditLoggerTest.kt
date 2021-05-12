@@ -98,7 +98,7 @@ class AuditLoggerTest {
 
     @Test
     fun `Test av logging av PrefillP6000 med context`() {
-        auditLogger.log("confirmDocument", "0105094340092", "sakId: 22874955 vedtakId: 9876543211 buc: P_BUC_02 sed: P6000 euxCaseId: 123123")
+        auditLogger.log("confirmDocument", "0105094340092", "sakId: 22874955, vedtakId: 9876543211, buc: P_BUC_02, sed: P6000, euxCaseId: 123123")
 
         verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture())
         val logEvent = argumentCaptor.getValue()
@@ -110,7 +110,7 @@ class AuditLoggerTest {
 
     @Test
     fun `Test av logging av PrefillP6000 uten aktoer`() {
-        auditLogger.log("confirmDocument", "", "sakId: 22874955 vedtakId: 9876543211 buc: P_BUC_02 sed: P6000 euxCaseId: 123123")
+        auditLogger.log("confirmDocument", "", "sakId: 22874955, vedtakId: 9876543211, buc: P_BUC_02, sed: P6000, euxCaseId: 123123")
 
         verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture())
         val logEvent = argumentCaptor.getValue()
@@ -122,7 +122,7 @@ class AuditLoggerTest {
 
     @Test
     fun `Test av logging med context uten verdi`() {
-        auditLogger.log("confirmDocument", "0105094340092", "sakId: 22874955 buc:  sed: P6000 euxCaseId: 123123")
+        auditLogger.log("confirmDocument", "0105094340092", "sakId: 22874955, buc: , sed:  P6000, euxCaseId: 123123")
 
         verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture())
         val logEvent = argumentCaptor.getValue()
@@ -135,7 +135,7 @@ class AuditLoggerTest {
 
     @Test
     fun `Test av logging av PrefillP2000 med context`() {
-        auditLogger.log("confirmDocument", "0105094340092", "sakId: 22874955 vedtakId: 9876543211 buc: P_BUC_02 sed: P6000 euxCaseId: 123456")
+        auditLogger.log("confirmDocument", "0105094340092", "sakId: 22874955, vedtakId: 9876543211, buc: P_BUC_02, sed: P6000, euxCaseId: 123456")
 
         verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture())
         val logEvent = argumentCaptor.getValue()
@@ -144,6 +144,20 @@ class AuditLoggerTest {
         assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=confirmDocument cs3Label=tjenesten"))
 
         assertTrue(logEvent.message.contains("flexString1=22874955 flexString1Label=sakId cs5=vedtakId:9876543211 buc:P_BUC_02 sed:P6000 euxCaseId:123456"))
+
+    }
+
+    @Test
+    fun `Test av logging av PrefillP2000 med context der en av verdiene er tom`() {
+        auditLogger.log("confirmDocument", "0105094340092", "sakId: , vedtakId: 9876543211, buc: P_BUC_02, sed: P6000, euxCaseId: 123456")
+
+        verify(mockedAppender, atLeastOnce()).doAppend(argumentCaptor.capture())
+        val logEvent = argumentCaptor.getValue()
+
+        assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
+        assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=confirmDocument cs3Label=tjenesten"))
+
+        assertTrue(logEvent.message.contains("cs5=vedtakId:9876543211 buc:P_BUC_02 sed:P6000 euxCaseId:123456"))
 
     }
 
