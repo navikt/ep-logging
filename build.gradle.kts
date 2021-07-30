@@ -34,17 +34,25 @@ tasks.withType<Test> {
 }
 
 val oidcTokenSupportVersion = "1.1.6"
+val springVersion by extra("5.3.+")
+val junitVersion by extra("5.8.+")
+
 
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("no.nav.security:token-validation-spring:${oidcTokenSupportVersion}")
-    implementation("org.springframework.boot:spring-boot-starter-web:2.5.3")
+    implementation("ch.qos.logback:logback-classic:1.2.4")
+    implementation("org.springframework:spring-web:$springVersion")
+    implementation("org.springframework:spring-context:$springVersion")
+    compileOnly("javax.servlet:javax.servlet-api:4.0.1")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.+")
+    testImplementation("javax.servlet:javax.servlet-api:4.0.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:${junitVersion}")
     testImplementation("org.mockito:mockito-junit-jupiter:3.2.4")
-    testImplementation("org.springframework:spring-test:5.+")
+    testImplementation("org.springframework:spring-test:${springVersion}")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+    //testImplementation("io.mockk:mockk:1.12.0")
 }
 
 // https://github.com/researchgate/gradle-release
