@@ -2,15 +2,15 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.5.21"
+    id("org.jetbrains.kotlin.jvm") version "1.6.0"
     `java-library`
     id("net.researchgate.release") version "2.8.1"
     `maven-publish`
-    id("com.adarshr.test-logger") version "2.0.0"
-    id("org.jetbrains.kotlin.plugin.spring") version "1.5.21"
-    id("com.github.ben-manes.versions") version "0.28.0"
-    id("se.patrikerdes.use-latest-versions") version "0.2.13"
-    id("org.owasp.dependencycheck") version "5.3.2.1"
+    id("com.adarshr.test-logger") version "3.1.0"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.6.0"
+    id("com.github.ben-manes.versions") version "0.39.0"
+    id("se.patrikerdes.use-latest-versions") version "0.2.18"
+    id("org.owasp.dependencycheck") version "6.5.0.1"
 }
 
 group = "no.nav.eessi.pensjon"
@@ -40,19 +40,17 @@ val junitVersion by extra("5.8.+")
 
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("no.nav.security:token-validation-spring:${oidcTokenSupportVersion}")
-    implementation("ch.qos.logback:logback-classic:1.2.4")
+    implementation("no.nav.security:token-validation-spring:$oidcTokenSupportVersion")
+    implementation("ch.qos.logback:logback-classic:1.2.7")
     implementation("org.springframework:spring-web:$springVersion")
     implementation("org.springframework:spring-context:$springVersion")
     compileOnly("javax.servlet:javax.servlet-api:4.0.1")
 
     testImplementation("javax.servlet:javax.servlet-api:4.0.1")
-    testImplementation("org.junit.jupiter:junit-jupiter:${junitVersion}")
-    testImplementation("org.mockito:mockito-junit-jupiter:3.2.4")
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+    testImplementation("org.mockito:mockito-junit-jupiter:4.1.0")
     testImplementation("org.springframework:spring-test:${springVersion}")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-    //testImplementation("io.mockk:mockk:1.12.0")
 }
 
 // https://github.com/researchgate/gradle-release
