@@ -33,7 +33,7 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-val oidcTokenSupportVersion = "1.1.6"
+val oidcTokenSupportVersion = "1.3.9"
 val springVersion by extra("5.3.+")
 val junitVersion by extra("5.8.+")
 
