@@ -1,9 +1,8 @@
 package no.nav.eessi.pensjon.logging
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import no.nav.eessi.pensjon.logging.RequestIdHeaderInterceptor.Companion.NAV_CALL_ID_HEADER
 import no.nav.eessi.pensjon.logging.RequestIdHeaderInterceptor.Companion.REQUEST_ID_HEADER
 import no.nav.eessi.pensjon.logging.RequestIdHeaderInterceptor.Companion.REQUEST_ID_MDC_KEY
@@ -20,7 +19,7 @@ import org.springframework.mock.http.client.MockClientHttpRequest
 class RequestIdHeaderInterceptorTest {
 
     private val mockRequest = MockClientHttpRequest()
-    private val mockExecution = mock<ClientHttpRequestExecution>()
+    private val mockExecution = mockk<ClientHttpRequestExecution>()
 
     private val theRequestId = "THE REQUEST ID"
     private val aBody = "BODY".toByteArray()
@@ -30,14 +29,14 @@ class RequestIdHeaderInterceptorTest {
 
     @BeforeEach
     fun setup() {
-        whenever(mockExecution.execute(any(), any())).thenReturn(mock())
+        every { mockExecution.execute(any(), any())} returns mockk()
     }
 
     @Test
     fun `should call downstream `() {
         RequestIdHeaderInterceptor().intercept(mockRequest, aBody, mockExecution)
 
-        verify(mockExecution).execute(any(), any())
+        verify { mockExecution.execute(any(), any())}
     }
 
     @Test
