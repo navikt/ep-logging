@@ -4,7 +4,7 @@ buildscript {
         junitVersion = '5.8.2'
         prometheusVersion = '1.8.1'
         kotlinVersion = '1.6.10'
-        mockkVersion = '1.12.2'
+        mockkVersion = '1.12.4'
         oidcTokenSupportVersion = "1.3.9"
         logbackVersion = "1.2.11"
     }
