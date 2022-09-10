@@ -12,7 +12,6 @@ buildscript {
 }
 
 plugins {
-    id("java-library")
     id("maven-publish")
     id("org.jetbrains.kotlin.jvm") version "${kotlinVersion}"
     id("net.researchgate.release") version "3.0.1"
@@ -24,6 +23,8 @@ plugins {
     id "org.sonarqube" version "3.4.0.2513"
     id 'jacoco'
 }
+
+apply from: "https://raw.githubusercontent.com/navikt/ep-script-plugins/release-0.1.0/ep-library.gradle"
 
 group = "no.nav.eessi.pensjon"
 
