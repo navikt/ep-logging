@@ -13,7 +13,7 @@ group = "no.nav.eessi.pensjon"
 
 dependencies {
     implementation("no.nav.security:token-validation-spring:$tokenSupportVersion")
-    implementation("ch.qos.logback:logback-classic:1.4.0")
+    implementation("ch.qos.logback:logback-classic:1.4.1")
     compileOnly("javax.servlet:javax.servlet-api:4.0.1")
 
     // Spring Framework BOM-fil overstyrer så vi får siste patch-versjon av Spring Framework
