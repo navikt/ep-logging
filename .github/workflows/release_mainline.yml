@@ -2,8 +2,8 @@ name: Release new version
 
 on:
   push:
-    branches:
-      - master
+    branches: 
+      - main
 
 jobs:
   release:
