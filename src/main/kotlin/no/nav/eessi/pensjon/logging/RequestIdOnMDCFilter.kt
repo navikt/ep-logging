@@ -1,15 +1,11 @@
 package no.nav.eessi.pensjon.logging
 
+import jakarta.servlet.*
 import org.slf4j.MDC
 import org.springframework.stereotype.Component
-import javax.servlet.Filter
-import javax.servlet.FilterChain
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
 import java.util.UUID
 import java.io.IOException
-import javax.servlet.ServletException
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequest
 
 
 @Component
