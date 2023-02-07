@@ -1,5 +1,8 @@
 package no.nav.eessi.pensjon.logging
 
+import jakarta.servlet.FilterChain
+import jakarta.servlet.ServletRequest
+import jakarta.servlet.ServletResponse
 import no.nav.eessi.pensjon.logging.RequestIdOnMDCFilter.Companion.REQUEST_ID_HEADER
 import no.nav.eessi.pensjon.logging.RequestIdOnMDCFilter.Companion.REQUEST_ID_MDC_KEY
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -10,9 +13,6 @@ import org.slf4j.MDC
 import org.springframework.mock.web.MockFilterChain
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
-import javax.servlet.FilterChain
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
 
 class RequestIdOnMDCFilterTest {
     private val mockFilterChain = MDCCapturingMockFilterChain()
