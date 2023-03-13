@@ -4,10 +4,29 @@ import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
+import jakarta.servlet.http.HttpServletRequest
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
 
-class RequestResponseLoggerFilter : Filter {
+@Component
+class RequestResponseLoggerFilter(private val overrideLogger: OverrideLogger? = null) : Filter {
+
+    private val logger: Logger by lazy { LoggerFactory.getLogger(RequestResponseLoggerFilter::class.java) }
+
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
+        try {
+            val httpServletRequest = request as HttpServletRequest
+            logDebug(httpServletRequest.requestURI)
+        } catch (e: Exception) {
+            logger.warn("Logging failed, continuing.", e)
+        }
         chain.doFilter(request, response)
     }
 
+    private fun logDebug(msg: String) = if (overrideLogger != null) overrideLogger.debug(msg) else logger.debug(msg)
+
+    interface OverrideLogger {
+        fun debug(msg: String)
+    }
 }
