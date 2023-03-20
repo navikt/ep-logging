@@ -10,23 +10,18 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class RequestResponseLoggerFilter(private val overrideLogger: OverrideLogger? = null) : Filter {
+class RequestResponseLoggerFilter(private val overrideLogger: Logger? = null) : Filter {
 
-    private val logger: Logger by lazy { LoggerFactory.getLogger(RequestResponseLoggerFilter::class.java) }
+    private val logger: Logger by lazy { overrideLogger ?: LoggerFactory.getLogger(RequestResponseLoggerFilter::class.java) }
 
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         try {
             val httpServletRequest = request as HttpServletRequest
-            logDebug(httpServletRequest.requestURI)
+            logger.debug(httpServletRequest.requestURI)
         } catch (e: Exception) {
             logger.warn("Logging failed, continuing.", e)
         }
         chain.doFilter(request, response)
     }
 
-    private fun logDebug(msg: String) = if (overrideLogger != null) overrideLogger.debug(msg) else logger.debug(msg)
-
-    interface OverrideLogger {
-        fun debug(msg: String)
-    }
 }
