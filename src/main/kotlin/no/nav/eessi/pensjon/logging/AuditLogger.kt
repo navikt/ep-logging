@@ -11,6 +11,8 @@ import java.util.*
 class AuditLogger(private val tokenValidationContextHolder: TokenValidationContextHolder){
 
     private val logger = LoggerFactory.getLogger("auditLogger")
+    private val loggerEessi = LoggerFactory.getLogger(AuditLogger::class.java)
+
     private val cef = AuditLoggerCEF()
 
     // Vi trenger denne no arg konstruktøren for å kunne bruke @Spy med mockito
@@ -39,9 +41,10 @@ class AuditLogger(private val tokenValidationContextHolder: TokenValidationConte
     private fun getSubjectfromToken(): String {
 
         return try {
-            (getClaims(tokenValidationContextHolder).get("NAVident")?.toString() ?: "").also { logger.debug("NavIdenten: $it") }
+            (getClaims(tokenValidationContextHolder).get("NAVident")?.toString() ?: "")
 
         } catch (ex: Exception) {
+            loggerEessi.warn("Brukerident ikke funnet")
             logger.warn("Brukerident ikke funnet")
             "n/a"
         }
