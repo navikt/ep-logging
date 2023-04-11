@@ -15,7 +15,7 @@ class RequestResponseLoggerFilter(private val overrideLogger: Logger? = null) : 
         try {
             val httpServletRequest = request as HttpServletRequest
             val requestURI = httpServletRequest.requestURI
-            if (!requestURI.startsWith("/internal/") && !requestURI.startsWith("/actuator/")  ) {
+            if (!shouldNotFilter(requestURI)) {
                 logger.debug(httpServletRequest.requestURI)
             }
         } catch (e: Exception) {
@@ -23,5 +23,7 @@ class RequestResponseLoggerFilter(private val overrideLogger: Logger? = null) : 
         }
         chain.doFilter(request, response)
     }
+
+    private fun shouldNotFilter(requestURI: String) = requestURI.startsWith("/internal/") || requestURI.startsWith("/actuator/")
 
 }
