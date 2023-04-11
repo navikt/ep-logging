@@ -1,7 +1,10 @@
 package no.nav.eessi.pensjon.logging
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import org.slf4j.Marker
 import org.slf4j.event.Level
 import org.slf4j.helpers.AbstractLogger
@@ -45,6 +48,25 @@ class RequestResponseLoggerFilterTest {
         spyLogger.debugEnabled = false
 
         mockRequest.requestURI = "/foo?bar=baz"
+
+        val filter = RequestResponseLoggerFilter(spyLogger)
+        filter.doFilter(mockRequest, mockResponse, mockFilterChain)
+
+        assertTrue(spyLogger.observations.isEmpty())
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = [
+        "/internal/isalive",
+        "/internal/isready",
+        "/internal/blabla",
+        "/actuator/prometheus"
+    ])
+    fun `Urler som ikke skal logges`(requestUri: String) {
+        val spyLogger = SpyLogger()
+        spyLogger.debugEnabled = true
+
+        mockRequest.requestURI = requestUri
 
         val filter = RequestResponseLoggerFilter(spyLogger)
         filter.doFilter(mockRequest, mockResponse, mockFilterChain)
