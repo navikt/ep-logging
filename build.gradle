@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        tokenSupportVersion = '3.0.10'
+        tokenSupportVersion = '3.0.11'
     }
 }
 
