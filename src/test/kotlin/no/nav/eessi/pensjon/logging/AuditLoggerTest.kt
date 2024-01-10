@@ -49,8 +49,8 @@ internal class AuditLoggerTest {
         auditLogger.cefLog(mapOf(AuditKey.BRUKERIDENT to "Z990652", AuditKey.TJENESTEN to "addInstitutionAndDocument",AuditKey.AKTOER to "31242"))
 
         val logEvent = argumentCaptor.captured
-        assertTrue(logEvent.getMessage().contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
-        assertTrue(logEvent.getMessage().contains("suid=Z990652 duid=31242 cs3=addInstitutionAndDocument cs3Label=tjenesten"))
+        assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
+        assertTrue(logEvent.message.contains("suid=Z990652 duid=31242 cs3=addInstitutionAndDocument cs3Label=tjenesten"))
     }
 
     @Test
@@ -59,8 +59,8 @@ internal class AuditLoggerTest {
 
         val logEvent = argumentCaptor.captured
 
-        assertTrue(logEvent.getMessage().contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
-        assertTrue(logEvent.getMessage().contains("suid=n/a cs3=OpprettBuc cs3Label=tjenesten cs5=euxCaseId:123456"))
+        assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
+        assertTrue(logEvent.message.contains("suid=n/a cs3=OpprettBuc cs3Label=tjenesten cs5=euxCaseId:123456"))
 
     }
 
@@ -70,8 +70,8 @@ internal class AuditLoggerTest {
 
         val logEvent = argumentCaptor.captured
 
-        assertTrue(logEvent.getMessage().contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
-        assertTrue(logEvent.getMessage().contains("suid=n/a cs3=getAllDocuments cs3Label=tjenesten cs5=euxCaseId:123456"))
+        assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
+        assertTrue(logEvent.message.contains("suid=n/a cs3=getAllDocuments cs3Label=tjenesten cs5=euxCaseId:123456"))
 
     }
 
@@ -82,8 +82,8 @@ internal class AuditLoggerTest {
 
         val logEvent = argumentCaptor.captured
 
-        assertTrue(logEvent.getMessage().contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
-        assertTrue(logEvent.getMessage().contains("suid=n/a cs3=buc cs3Label=tjenesten"))
+        assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
+        assertTrue(logEvent.message.contains("suid=n/a cs3=buc cs3Label=tjenesten"))
 
     }
 
