@@ -51,7 +51,7 @@ class AuditLogger(private val tokenValidationContextHolder: TokenValidationConte
     }
 
     fun getClaims(tokenValidationContextHolder: TokenValidationContextHolder): JwtTokenClaims {
-        val context = tokenValidationContextHolder.tokenValidationContext
+        val context = tokenValidationContextHolder.getTokenValidationContext()
         if(context.issuers.isEmpty())
             throw RuntimeException("No issuer found in context")
 
