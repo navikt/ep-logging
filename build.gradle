@@ -24,7 +24,7 @@ dependencies {
     implementation("org.springframework:spring-context")
     implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
 
-    testImplementation(platform("org.junit:junit-bom:5.10.1"))
+    testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.springframework:spring-test")
     testImplementation("io.mockk:mockk:1.13.9")
