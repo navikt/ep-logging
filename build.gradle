@@ -2,9 +2,6 @@ buildscript {
     ext {
         kotlinVersion = '2.0.21'
         tokenSupportVersion = '4.1.4'
-
-        //test
-        jupiterVersion = '5.11.2'
     }
 }
 
@@ -27,8 +24,7 @@ dependencies {
     implementation("org.springframework:spring-context")
     implementation("jakarta.servlet:jakarta.servlet-api:6.1.0")
 
-    testImplementation(platform("org.junit:junit-bom:$jupiterVersion"))
-    testImplementation("org.junit.jupiter:junit-jupiter:$jupiterVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.2")
     testImplementation("org.springframework:spring-test")
     testImplementation("io.mockk:mockk:1.13.13")
 }
