@@ -2,6 +2,9 @@ buildscript {
     ext {
         kotlinVersion = '2.0.21'
         tokenSupportVersion = '4.1.4'
+
+        //test
+        jupiterVersion = '5.11.2'
     }
 }
 
