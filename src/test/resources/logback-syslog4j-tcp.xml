@@ -1,0 +1,20 @@
+<configuration>
+  <appender name="TEST-TCP" class="no.nav.eessi.pensjon.logging.appender.Syslog4jAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <pattern>%date %-5level %logger{35} - %message%n</pattern>
+    </layout>
+
+    <syslogConfig class="org.productivity.java.syslog4j.impl.net.tcp.TCPNetSyslogConfig">
+      <host>localhost</host>
+      <port>45553</port>
+      <ident>syslog-test</ident>
+
+      <!-- make logger synchronous for the tests -->
+      <threaded>false</threaded>
+    </syslogConfig>
+  </appender>
+
+  <root level="DEBUG">
+    <appender-ref ref="TEST-TCP" />
+  </root>
+</configuration>
