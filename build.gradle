@@ -27,7 +27,7 @@ dependencies {
     // audit logger / syslog hentet
     implementation('org.syslog4j:syslog4j:0.9.30')
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.13.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.13.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     testImplementation("org.springframework:spring-test")
