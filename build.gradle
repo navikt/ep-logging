@@ -1,7 +1,7 @@
 buildscript {
     ext {
         kotlinVersion = '2.4.0'
-        tokenSupportVersion = '6.0.8'
+        tokenSupportVersion = '6.0.11'
     }
 }
 
