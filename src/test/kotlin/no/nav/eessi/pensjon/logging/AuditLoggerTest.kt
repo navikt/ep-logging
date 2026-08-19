@@ -55,18 +55,18 @@ internal class AuditLoggerTest {
 
     @Test
     fun testLogBuc() {
-        auditLogger.logBuc("OpprettBuc", "123456")
+        auditLogger.logBuc("OpprettBuc", "euxCaseId: 123546, documentId: 1684rthg5f6gh54df")
 
         val logEvent = argumentCaptor.captured
 
         assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
-        assertTrue(logEvent.message.contains("suid=n/a cs3=OpprettBuc cs3Label=tjenesten cs5=euxCaseId:123456"))
+        assertTrue(logEvent.message.contains("suid=n/a cs3=OpprettBuc cs3Label=tjenesten cs5=euxCaseId:123546 documentId:1684rthg5f6gh54df"))
 
     }
 
     @Test
     fun `logbuc med tjenestenavn alldoc`() {
-        auditLogger.logBuc("getAllDocuments", "123456")
+        auditLogger.logBuc("getAllDocuments", "euxCaseId: 123456")
 
         val logEvent = argumentCaptor.captured
 
