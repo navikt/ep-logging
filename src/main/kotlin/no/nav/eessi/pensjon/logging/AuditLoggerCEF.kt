@@ -60,7 +60,7 @@ class AuditLoggerCEF {
             sb.append(sakResult.first())
         }
 
-        val validkey = listOf("vedtakId", "buc", "sed", "euxCaseId")
+        val validkey = listOf("vedtakId", "buc", "sed", "euxCaseId", "documentId")
         val extraResult = map.filterKeys { validkey.contains(it) }
         if (extraResult.isNotEmpty()) {
             val result = extraResult.map { "${it.key}:${it.value}" }

@@ -30,12 +30,8 @@ class AuditLogger(private val tokenValidationContextHolder: TokenValidationConte
         cefLog(mapOf(AuditKey.BRUKERIDENT to getSubjectfromToken(), AuditKey.TJENESTEN to tjenesteFunctionName, AuditKey.AKTOER to aktoerId, AuditKey.REQUESTCONTEXT to requestContext))
     }
 
-    fun logBorger(tjenesteFunctionName: String, borgerfnr: String) {
-        cefLog(mapOf(AuditKey.BRUKERIDENT to getSubjectfromToken(), AuditKey.TJENESTEN to tjenesteFunctionName, AuditKey.BORGERFNR to borgerfnr))
-    }
-
-    fun logBuc(tjenesteFunctionName: String, euxData: String) {
-        cefLog(mapOf(AuditKey.BRUKERIDENT to getSubjectfromToken(), AuditKey.TJENESTEN to tjenesteFunctionName, AuditKey.EUXCASEID to euxData))
+    fun logBuc(tjenesteFunctionName: String, requestContext: String) {
+        cefLog(mapOf(AuditKey.BRUKERIDENT to getSubjectfromToken(), AuditKey.TJENESTEN to tjenesteFunctionName, AuditKey.REQUESTCONTEXT to requestContext))
     }
 
     private fun getSubjectfromToken(): String {
