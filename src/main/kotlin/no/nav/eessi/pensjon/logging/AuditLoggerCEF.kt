@@ -1,6 +1,10 @@
 package no.nav.eessi.pensjon.logging
 
+import org.slf4j.LoggerFactory
+
 class AuditLoggerCEF {
+
+    private val logger = LoggerFactory.getLogger(AuditLoggerCEF::class.java)
 
     fun getCefLog(values: Map<AuditKey, String>): String {
         return cefHeader() + cefExtension(values)
@@ -13,8 +17,8 @@ class AuditLoggerCEF {
 
     fun cefExtension(values: Map<AuditKey, String>): String {
         return String.format(
-            "end=%s %s%scs3=%s cs3Label=tjenesten %s ",
-            getTimeStamp(), getBrukerident(values), getAktoer(values), getTjenesten(values),
+            "end=%s %s%scs3=Tjeneste:%s %scs5=RequestContext: %s",
+            getTimeStamp(), getBrukerident(values), getAktoer(values), getTjenesten(values), getBucType(values),
             getDelimitedContext(values)
         )
     }
@@ -25,6 +29,9 @@ class AuditLoggerCEF {
 
     private fun getAktoer(values: Map<AuditKey, String>) =
         filterOutUnusedField("duid=", values.getOrDefault(AuditKey.AKTOER, "") + " ")
+
+    private fun getBucType(values: Map<AuditKey, String>) =
+        filterOutUnusedField("buctype=", values.getOrDefault(AuditKey.BUCTYPE, "") + " ")
 
     private fun getTjenesten(values: Map<AuditKey, String>) = values.getOrDefault(AuditKey.TJENESTEN, "")
 
@@ -53,20 +60,17 @@ class AuditLoggerCEF {
 
     private fun getDelimitedContextText(map: Map<String, String>): String {
         val sb = StringBuffer()
-
-        val sakResult = map.filter { it.key == "sakId" }
-            .map { "flexString1=${it.value} flexString1Label=sakId " }
-        if (sakResult.isNotEmpty()) {
-            sb.append(sakResult.first())
-        }
-
-        val validkey = listOf("vedtakId", "buc", "sed", "euxCaseId", "documentId")
+        val validkey = listOf("vedtakId", "buc", "sed", "euxCaseId", "documentId", "bucType", "journalpostId", "sakId")
         val extraResult = map.filterKeys { validkey.contains(it) }
-        if (extraResult.isNotEmpty()) {
-            val result = extraResult.map { "${it.key}:${it.value}" }
-            if (result.isNotEmpty()) {
-                sb.append("cs5=").append(result.joinToString(" "))
+        try {
+            if (extraResult.isNotEmpty() && extraResult.values.isNotEmpty()) {
+                val result = extraResult.map { "${it.key}:${it.value}" }
+                if (result.isNotEmpty()) {
+                    sb.append(result.joinToString(" "))
+                }
             }
+        } catch (ex: Exception) {
+            logger.warn(ex.message, ex)
         }
         return sb.toString()
     }

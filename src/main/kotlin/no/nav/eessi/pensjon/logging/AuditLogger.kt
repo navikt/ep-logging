@@ -18,10 +18,6 @@ class AuditLogger(private val tokenValidationContextHolder: TokenValidationConte
     // Vi trenger denne no arg konstruktøren for å kunne bruke @Spy med mockito
     constructor() : this(SpringTokenValidationContextHolder())
 
-    fun log(tjenesteFunctionName: String) {
-        cefLog(mapOf(AuditKey.BRUKERIDENT to getSubjectfromToken(), AuditKey.TJENESTEN to tjenesteFunctionName))
-    }
-
     fun log(tjenesteFunctionName: String, aktoerId: String) {
         cefLog(mapOf(AuditKey.BRUKERIDENT to getSubjectfromToken(), AuditKey.TJENESTEN to tjenesteFunctionName, AuditKey.AKTOER to aktoerId))
     }
