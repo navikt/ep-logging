@@ -50,7 +50,7 @@ internal class AuditLoggerTest {
 
         val logEvent = argumentCaptor.captured
         assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
-        assertTrue(logEvent.message.contains("suid=Z990652 duid=31242 cs3=addInstitutionAndDocument cs3Label=tjenesten"))
+        assertTrue(logEvent.message.contains("suid=Z990652 duid=31242 cs3=Tjeneste:addInstitutionAndDocument cs5=RequestContext:"))
     }
 
     @Test
@@ -60,7 +60,7 @@ internal class AuditLoggerTest {
         val logEvent = argumentCaptor.captured
 
         assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
-        assertTrue(logEvent.message.contains("suid=n/a cs3=OpprettBuc cs3Label=tjenesten cs5=euxCaseId:123546 documentId:1684rthg5f6gh54df"))
+        assertTrue(logEvent.message.contains("suid=n/a cs3=Tjeneste:OpprettBuc cs5=RequestContext: euxCaseId:123546 documentId:1684rthg5f6gh54df"))
 
     }
 
@@ -71,19 +71,29 @@ internal class AuditLoggerTest {
         val logEvent = argumentCaptor.captured
 
         assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
-        assertTrue(logEvent.message.contains("suid=n/a cs3=getAllDocuments cs3Label=tjenesten cs5=euxCaseId:123456"))
+        assertTrue(logEvent.message.contains("suid=n/a cs3=Tjeneste:getAllDocuments cs5=RequestContext: euxCaseId:123456"))
 
     }
 
 
     @Test
     fun `test av log kun funksjonnavn i log (getdocuments i fagmodul)`() {
-        auditLogger.log("buc")
+        auditLogger.logBuc("createBuc","bucType:P_BUC_02")
 
         val logEvent = argumentCaptor.captured
 
         assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
-        assertTrue(logEvent.message.contains("suid=n/a cs3=buc cs3Label=tjenesten"))
+        assertTrue(logEvent.message.contains("suid=n/a cs3=Tjeneste:createBuc cs5=RequestContext: bucType:P_BUC_02"))
+    }
+
+    @Test
+    fun `Test av log med funksjonnavn og rinanummer og dokumrntId i log (getdocuments i fagmodul)`() {
+        auditLogger.logBuc("getDocument","euxCaseId: 123123, documentId: Tjui68IY541HBFT2285")
+
+        val logEvent = argumentCaptor.captured
+
+        assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
+        assertTrue(logEvent.message.contains("suid=n/a cs3=Tjeneste:getDocument cs5=RequestContext: euxCaseId:123123 documentId:Tjui68IY541HBFT2285"))
 
     }
 
@@ -94,8 +104,7 @@ internal class AuditLoggerTest {
         val logEvent = argumentCaptor.captured
 
         assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
-        assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=confirmDocument cs3Label=tjenesten"))
-        assertTrue(logEvent.message.contains("flexString1=22874955 flexString1Label=sakId cs5=vedtakId:9876543211 buc:P_BUC_02 sed:P6000 euxCaseId:123123"))
+        assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=Tjeneste:confirmDocument cs5=RequestContext: sakId:22874955 vedtakId:9876543211 buc:P_BUC_02 sed:P6000 euxCaseId:123123"))
     }
 
     @Test
@@ -105,8 +114,7 @@ internal class AuditLoggerTest {
         val logEvent = argumentCaptor.captured
 
         assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
-        assertTrue(logEvent.message.contains("suid=n/a cs3=confirmDocument cs3Label=tjenesten"))
-        assertTrue(logEvent.message.contains("flexString1=22874955 flexString1Label=sakId cs5=vedtakId:9876543211 buc:P_BUC_02 sed:P6000 euxCaseId:123123"))
+        assertTrue(logEvent.message.contains("suid=n/a cs3=Tjeneste:confirmDocument cs5=RequestContext: sakId:22874955 vedtakId:9876543211 buc:P_BUC_02 sed:P6000 euxCaseId:123123"))
     }
 
     @Test
@@ -116,10 +124,8 @@ internal class AuditLoggerTest {
         val logEvent = argumentCaptor.captured
 
         assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
-        assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=confirmDocument cs3Label=tjenesten"))
-        assertTrue(logEvent.message.contains("flexString1=22874955 flexString1Label=sakId cs5=sed:P6000 euxCaseId:123123"))
+        assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=Tjeneste:confirmDocument cs5=RequestContext: sakId:22874955 sed:P6000 euxCaseId:123123"))
     }
-
 
     @Test
     fun `Test av logging av PrefillP2000 med context`() {
@@ -128,10 +134,7 @@ internal class AuditLoggerTest {
         val logEvent = argumentCaptor.captured
 
         assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
-        assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=confirmDocument cs3Label=tjenesten"))
-
-        assertTrue(logEvent.message.contains("flexString1=22874955 flexString1Label=sakId cs5=vedtakId:9876543211 buc:P_BUC_02 sed:P6000 euxCaseId:123456"))
-
+        assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=Tjeneste:confirmDocument cs5=RequestContext: sakId:22874955 vedtakId:9876543211 buc:P_BUC_02 sed:P6000 euxCaseId:123456"))
     }
 
     @Test
@@ -141,10 +144,7 @@ internal class AuditLoggerTest {
         val logEvent = argumentCaptor.captured
 
         assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO"))
-        assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=confirmDocument cs3Label=tjenesten"))
-
-        assertTrue(logEvent.message.contains("cs5=vedtakId:9876543211 buc:P_BUC_02 sed:P6000 euxCaseId:123456"))
-
+        assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=Tjeneste:confirmDocument cs5=RequestContext: vedtakId:9876543211 buc:P_BUC_02 sed:P6000 euxCaseId:123456"))
     }
 
     @Test
@@ -153,9 +153,9 @@ internal class AuditLoggerTest {
 
         val logEvent = argumentCaptor.captured
 
-        assertTrue(logEvent.message.contains("sed:P6000"))
         assertTrue(logEvent.message.contains("CEF:0|EESSI|EESSI-PENSJON|1.0|Audit:accessed|AuditLog|INFO|"))
-        assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=confirmDocument cs3Label=tjenesten cs5=sed:P6000"))
+        assertTrue(logEvent.message.contains("suid=n/a duid=0105094340092 cs3=Tjeneste:confirmDocument cs5=RequestContext: sed:P6000"))
 
     }
+
 }
