@@ -75,6 +75,25 @@ internal class AuditLoggerTest {
 
     }
 
+    @Test
+    fun `getGjenlevendeRinasakerVedtak log med aktoerId og requestcontext`() {
+        auditLogger.log("getGjenlevendeRinasakerVedtak", "aktoerId: 1234569878562", "euxCaseId: 123546")
+
+        val logEvent = argumentCaptor.captured
+
+        assertTrue(logEvent.message.contains("suid=n/a duid=aktoerId: 1234569878562 cs3=Tjeneste:getGjenlevendeRinasakerVedtak cs5=RequestContext: euxCaseId:123546"))
+
+    }
+
+    @Test
+    fun `getSingleBucogSedViewMedAvdod log med aktoerId og requestcontext som inneholder euxCaseId sakId og avdodFnr`() {
+        auditLogger.log("getSingleBucogSedViewMedAvdod", "aktoerId:1234569878562", "euxCaseId:123546, sakId:654321, avdodFnr:986326356565")
+
+        val logEvent = argumentCaptor.captured
+
+        assertTrue(logEvent.message.contains("suid=n/a duid=aktoerId:1234569878562 cs3=Tjeneste:getSingleBucogSedViewMedAvdod cs5=RequestContext: euxCaseId:123546 sakId:654321 avdodFnr:986326356565"))
+
+    }
 
     @Test
     fun `test av log kun funksjonnavn i log (getdocuments i fagmodul)`() {
