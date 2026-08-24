@@ -60,7 +60,7 @@ class AuditLoggerCEF {
 
     private fun getDelimitedContextText(map: Map<String, String>): String {
         val sb = StringBuffer()
-        val validkey = listOf("vedtakId", "buc", "sed", "euxCaseId", "documentId", "bucType", "journalpostId", "sakId")
+        val validkey = listOf("vedtakId", "buc", "sed", "euxCaseId", "documentId", "bucType", "journalpostId", "sakId", "avdodFnr")
         val extraResult = map.filterKeys { validkey.contains(it) }
         try {
             if (extraResult.isNotEmpty() && extraResult.values.isNotEmpty()) {
